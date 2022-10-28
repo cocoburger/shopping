@@ -33,7 +33,7 @@ export const UPDATE_CART = gql`
     }
 `
 
-export const GET_CART = gql`
+export const GET_CART = gql` 
   query GET_CART {
     cart {
       id
@@ -46,4 +46,3 @@ export const GET_CART = gql`
 `
 
 
-export default GET_CART

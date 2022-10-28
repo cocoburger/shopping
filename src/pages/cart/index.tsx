@@ -1,6 +1,6 @@
 import {useQuery} from "react-query";
 import {graphqlFetcher, QueryKeys} from "../../queryClient";
-import GET_CART, {CartType} from "../../graphql/cart";
+import {CartType, GET_CART} from "../../graphql/cart";
 import CartList from "./CartList";
 
 const Cart = () => {
@@ -9,7 +9,6 @@ const Cart = () => {
         cacheTime:  1000,
     })
     const cartItems = Object.values(data || {}) as CartType[]
-    console.log(cartItems);
 
     if (!cartItems.length) return <div>장바구니가 비워있어요</div>
 

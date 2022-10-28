@@ -1,8 +1,7 @@
 import { graphql } from 'msw'
 import { v4 as uuidv4 } from 'uuid';
 import GET_PRODUCTS, {GET_PRODUCT} from "../graphql/products";
-import GET_CART, {ADD_CART, Cart, UPDATE_CART} from "../graphql/cart";
-import cart from "../graphql/cart";
+import {ADD_CART, CartType, UPDATE_CART, GET_CART} from "../graphql/cart";
 
 const mockProducts =(() =>
     Array.from({length:20}).map((_, i) => ({
@@ -14,7 +13,7 @@ const mockProducts =(() =>
     createdAt: new Date(1663739034234+(i*1000*60*60*24)).toString()
 })))()
 
-let cartData : {[key: string]: Cart } = {
+let cartData : {[key: string]: CartType } = {
 
 }
 
@@ -33,35 +32,34 @@ export const  handlers = [
         return res()
     }),
     graphql.query(GET_CART, (req, res, ctx) => {
-        return res();
+        return res(ctx.data(cartData))
     }),
     graphql.mutation(ADD_CART, (req,res, ctx) => {
-        const newData = {...cartData}
+        const newCartData = {...cartData}
         const id =  req.variables.id;
-        if (newData[id]) {
-            newData[id] =  {
-              ...newData[id],
-              amount: (newData[id].amount || 0) + 1
-          }
-        } else {
-            const found = mockProducts.find(item => item?.id === req?.variables?.id)
-            if (found) {
-                newData[id] =  {
-                    ...found,
-                    amount: 1
-                }
-            }
+       const targetProduct = mockProducts.find(item => item.id === req.variables.id)
+        if(!targetProduct) throw new Error('상품이 없습니다.')
+
+        const newItem = {
+            ...targetProduct,
+            amount: (newCartData[id]?.amount || 0) + 1,
         }
-        cartData = newData;
-        return res(ctx.data(newData));
+        newCartData[id] = newItem
+        cartData = newCartData
+
+        return res(ctx.data(newItem));
     }),
     graphql.mutation(UPDATE_CART, (req, res, ctx) => {
         const newData = {...cartData}
-        const {id, amount} =  req.variables.id;
+        const {id, amount} =  req.variables;
         if (!newData[id]) { throw new Error('없는 데이터입니다.')}
-            newData[id] =  {
-                ...newData[id],
-                amount: (newData[id].amount || 0) + 1
-            }
+
+        const newItem = {
+            ...newData[id],
+            amount,
+        }
+        newData[id] = newItem
+        cartData = newData
+        return res(ctx.data(newItem))
     }),
 ]
