@@ -7,7 +7,12 @@ import GET_PRODUCTS, { Products} from "../../graphql/products";
 
 function ProductList() {
     const {data} = useQuery<Products>(QueryKeys.PRODUCTS, () => graphqlFetcher(GET_PRODUCTS))
+    /**
+     * 감자먹기
+     */
+    const hanlde = () => {
 
+    }
     return (
         <div>
             <h2>상품 목록</h2>

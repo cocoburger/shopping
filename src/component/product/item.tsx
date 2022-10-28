@@ -5,14 +5,13 @@ import {graphqlFetcher} from "../../queryClient";
 import {ADD_CART} from "../../graphql/cart";
 
 const ProductItem = ({
-    description,
     imageUrl,
     price,
     title,
     id,
-    createAt
 }: Product) => {
     const { mutate: addCart } = useMutation((id: string) => graphqlFetcher(ADD_CART, {id}))
+
     return (
         <li className='product-item'>
             <Link to={`/products/${id}`}>

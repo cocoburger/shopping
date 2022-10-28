@@ -10,15 +10,15 @@ export type CartType = {
 }
 
 export const ADD_CART = gql`
-    mutation ADD_CART($id:string) {
-       addCart(id: $id) {
-        id
-        imageUrl
-        price
-        title
-        amount
-       }
+  mutation ADD_CART($id: string) {
+    cart(id: $id) {
+      id
+      imageUrl
+      price
+      title
+      amount
     }
+  }
 `
 
 export const UPDATE_CART = gql`
@@ -33,17 +33,17 @@ export const UPDATE_CART = gql`
     }
 `
 
-
-
-const GET_CART = gql`
-    query GET_CART {
-        cart {
-        id
-        imageUrl
-        price
-        title
-        amount
-        }
-    } 
+export const GET_CART = gql`
+  query GET_CART {
+    cart {
+      id
+      imageUrl
+      price
+      title
+      amount
+    }
+  }
 `
+
+
 export default GET_CART

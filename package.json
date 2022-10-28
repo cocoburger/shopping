@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tanstack/react-query-devtools": "^4.0.10",
+    "eslint": "^8.25.0",
     "graphql-request": "^5.0.0",
     "graphql-tag": "^2.12.6",
     "react": "^18.2.0",

@@ -18,8 +18,8 @@ type ANY = {[key: string]: any}
             client = new QueryClient({
                 defaultOptions: {
                     queries: {
-                        cacheTime: 1000 * 60 * 60 * 24, //inactive 상태인 캐시 데이터가 메모리에 남아있는 시간이다. 이 시간이 지나면 캐시 데이터는 가비지 컬렉터에 의해 삭제 default는 5분이다.
-                        staleTime: 1000 * 60, // data가 fresh 상태로 유지되는 시간이다. 해당 시간이 지나면 stale 상태가 된다. default는 0이다.
+                        cacheTime: Infinity, //inactive 상태인 캐시 데이터가 메모리에 남아있는 시간이다. 이 시간이 지나면 캐시 데이터는 가비지 컬렉터에 의해 삭제 default는 5분이다.
+                        staleTime:Infinity, // data가 fresh 상태로 유지되는 시간이다. 해당 시간이 지나면 stale 상태가 된다. default는 0이다.
                         refetchOnMount: false, // 데이터가 stale 상태인 경우 마운트 시 마다 refetch를 실행하는 옵션
                         refetchOnReconnect: false, // 데이터가 stale 상태인 경우 재 연결될 때 refetch를 실행하는 옵션
                         refetchOnWindowFocus: false, //데이터가 stale 상태인 경우 윈도우 포커싱 될 때 마다 refetch를 실행하는 옵션
@@ -67,9 +67,14 @@ type ANY = {[key: string]: any}
       }
   }
 
-  export const graphqlFetcher = (query: RequestDocument, variables = {}) => request(
-      BASE_URL, query, variables
-  )
+export const graphqlFetcher = (query: RequestDocument, variables = {}) =>
+    // request(BASE_URL, query, variables);
+request(`${BASE_URL}/graphql`, query, variables,   {
+        "Content-Type": "application/json",
+         "Access-Control-Allow-Origin": BASE_URL,
+        "accept": "application/json",
+    })
+
 
   export const QueryKeys = {
       PRODUCTS: 'PRODUCTS',
