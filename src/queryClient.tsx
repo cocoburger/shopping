@@ -1,10 +1,4 @@
-import {
-    useQuery,
-    useMutation,
-    useQueryClient,
-    QueryClient,
-    QueryClientProvider,
-  } from 'react-query'
+import {QueryClient,} from 'react-query'
 import {request, RequestDocument} from 'graphql-request'
 
 const BASE_URL ='/';
@@ -43,29 +37,28 @@ type ANY = {[key: string]: any}
       body?: ANY
       params?: ANY
   }) => {
-
+ 
       try {
-          let url = `${BASE_URL}${path}`
+          let url = `${BASE_URL}${path}`;
           const fetchOption: RequestInit = {
               method,
               headers: {
                   'Content-Type': 'application/json',
                   'Access-Control-Allow-Origin' : BASE_URL
               }
-          }
+          };
           if (params) {
-              const searchParams = new URLSearchParams(params)
+              const searchParams = new URLSearchParams(params);
               url += '?' + searchParams.toString()
           }
 
           if (body) fetchOption.body = JSON.stringify(body);
-          const result = await fetch(url, fetchOption)
-          const json = await result.json()
-          return json
+          const result = await fetch(url, fetchOption);
+        return await result.json()
       } catch (e) {
           console.log(e)
       }
-  }
+  };
 
 export const graphqlFetcher = (query: RequestDocument, variables = {}) =>
     // request(BASE_URL, query, variables);
@@ -73,10 +66,10 @@ request(`${BASE_URL}/graphql`, query, variables,   {
         "Content-Type": "application/json",
          "Access-Control-Allow-Origin": BASE_URL,
         "accept": "application/json",
-    })
+    });
 
 
   export const QueryKeys = {
       PRODUCTS: 'PRODUCTS',
       CART: 'CART'
-  }
+  };
