@@ -1,10 +1,14 @@
-import React, {SyntheticEvent, useRef} from 'react';
+import React, {createRef, SyntheticEvent, useRef} from 'react';
 import CartItem from "./CartItem";
 import {CartType} from "../../graphql/cart";
+import {useSetRecoilState} from "recoil";
+import {checkedCartState} from "../../recoil/cart";
+import WillPay from "../../component/cart/willPay";
 
 function CartList({items}: { items: CartType[] }) {
+    const setCheckedCartData = useSetRecoilState(checkedCartState)
     const formRef = useRef<HTMLFormElement>(null);
-    const checkboxRefs = items.map(() => useRef<HTMLInputElement>());
+    const checkboxRefs = items.map(() => createRef<HTMLInputElement>());
 
 
     const handleCheckboxChanged = (e:SyntheticEvent) => {
@@ -22,17 +26,28 @@ function CartList({items}: { items: CartType[] }) {
             // each item
             formRef.current.querySelector<HTMLInputElement>('.select-all').checked = (selectedCount === items.length);
         }
+
+        const checkedItems =  checkboxRefs.reduce<CartType[]>((res, ref, i) => {
+            if (ref.current!.checked) {
+                res.push(items[i])
+            }
+            return res;
+        },[])
+        setCheckedCartData(checkedItems as CartType[])
     };
     return (
-        <form ref={formRef} onChange={handleCheckboxChanged}>
-            <label>
-                <input className='select-all' name='select-all' type='checkbox'/>
-                전체삭제
-            </label>
-            <ul>
-                {items.map(item => <CartItem {...item} key={item.id} ref={checkboxRefs[i]}/>)}
-            </ul>
-        </form>
+        <div>
+            <form ref={formRef} onChange={handleCheckboxChanged}>
+                <label>
+                    <input className='select-all' name='select-all' type='checkbox'/>
+                    전체선택
+                </label>
+                <ul>
+                    {items.map((item,idx) => <CartItem {...item} key={item.id} ref={checkboxRefs[idx]}/>)}
+                </ul>
+            </form>
+            <WillPay />
+        </div>
     );
 }
 

@@ -3,6 +3,7 @@ import React, {ForwardedRef, forwardRef, SyntheticEvent} from 'react';
 import {CartType, DELETE_CART, UPDATE_CART} from "../../graphql/cart";
 import {useMutation} from "react-query";
 import {getClient, graphqlFetcher, QueryKeys} from "../../queryClient";
+import ItemData from "../../component/cart/ItemData";
 
 function CartItem({id, imageUrl, price, title, amount }: CartType, ref: ForwardedRef<HTMLInputElement>) {
     const queryClient = getClient();
@@ -54,9 +55,7 @@ function CartItem({id, imageUrl, price, title, amount }: CartType, ref: Forwarde
     return (
         <li className='cart-item'>
             <input className='cart-item__checkbox' type="checkbox" name={`select-item`} ref={ref}/>
-            <img className=".cart-item__image" src={imageUrl}/>
-            <p className='cart-item__price'>{price}</p>
-            <p className='cart-item__title'>{title}</p>
+            <ItemData  imageUrl={imageUrl} price={price} title={title} />
             <input type='number' className='cart-item__amount' value={amount} min={1} onChange={handleUpdateAmount}/>
             <button className='cart-item__button' type='button' onClick={handleDeleteItem}>삭제</button>
         </li>

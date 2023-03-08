@@ -1,4 +1,4 @@
-import { gql } from 'graphql-tag'
+import {gql} from 'graphql-tag'
 
 export type Product = {
     id: string
@@ -29,10 +29,10 @@ export const GET_PRODUCT = gql`
       query GET_PRODUCT($id: string) {
         id 
         imageUrl
-        price 
+        price   
         title
-        description
-        createAt
+        description 
+        createAt  
       }
 `
 
