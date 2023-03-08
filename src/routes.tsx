@@ -1,9 +1,6 @@
-
 import GlobalLayout from './pages/_layout'
 import Index from './pages/index'
 import ProductsId from './pages/products/[id]'
-import ProductDetail from "./pages/products/[id]";
-import MainPage from "./pages/index";
 import ProductList from "./pages/products";
 import Cart from "./pages/cart";
 
@@ -29,11 +26,11 @@ export const routes = [
       { path: '/cart', element: <Cart />, index: true},
     ]
   }
-]
+];
 
 export const pages = [
   { route: '/' },
   { route: '/cart' },
   { route: '/products' },
   { route: '/products/:id' },
-]
+];
