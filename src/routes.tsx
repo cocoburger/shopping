@@ -3,6 +3,7 @@ import Index from './pages/index'
 import ProductsId from './pages/products/[id]'
 import ProductList from "./pages/products";
 import Cart from "./pages/cart";
+import Payment from "./pages/payment/Payment";
 
 // 안쪽에 routes를 살펴보면 배열 안 객체로 담겨있다. 그리고 path, element, children 요소가 있다.
 // 여기서 Outlet이라는 것이 나온다.
@@ -24,6 +25,7 @@ export const routes = [
       { path: '/products', element: <ProductList />, index: true},
       { path: '/products/:id', element: <ProductsId />, },
       { path: '/cart', element: <Cart />, index: true},
+      { path: '/cart', element: <Payment />, index: true},
     ]
   }
 ];
