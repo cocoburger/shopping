@@ -16,11 +16,13 @@ function CartList({items}: { items: CartType[] }) {
         if (!formRef.current) return;
         const data = new FormData(formRef.current);
         const selectedCount = data.getAll('select-item').length;
+        //장바구니 상품이 모두 체크가 되어 있다면, 전체 선택도 체크되어야 한다.
         formRef.current.querySelector<HTMLInputElement>('.select-all').checked = (selectedCount === items.length);
 
     }
 
     const setItemsCheckFromAll = (targetInput: HTMLInputElement) => {
+        // 전체 선택이 체크되었으면, 각 상품 체크박스에 true값을 주어 check 상태로 만들어준다.
         const allChecked = targetInput.checked;
         checkboxRefs.forEach(inputElem => {
             inputElem.current!.checked = allChecked
@@ -40,6 +42,8 @@ function CartList({items}: { items: CartType[] }) {
     };
 
     useEffect(() => {
+        //뒤로가기시에 기존에 체크여부를 판단하기 위함.
+        //data-set을 사용해 id 값이 일치하면 체크로 활성화.
         checkedCartData.forEach(item => {
             const itemRef  = checkboxRefs.find(ref => ref.current!.dataset.id === item.id)
             if (itemRef) {
