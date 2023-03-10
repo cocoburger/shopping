@@ -25,7 +25,7 @@ export const routes = [
       { path: '/products', element: <ProductList />, index: true},
       { path: '/products/:id', element: <ProductsId />, },
       { path: '/cart', element: <Cart />, index: true},
-      { path: '/cart', element: <Payment />, index: true},
+      { path: '/payment', element: <Payment />, index: true},
     ]
   }
 ];

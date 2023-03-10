@@ -6,28 +6,49 @@ import {checkedCartState} from "../../recoil/cart";
 import WillPay from "../../component/cart/willPay";
 
 function CartList({items}: { items: CartType[] }) {
-    const [checkedCardData, setCheckedCartData] = useRecoilState(checkedCartState);
+    const [checkedCartData, setCheckedCartData] = useRecoilState(checkedCartState);
     const formRef = useRef<HTMLFormElement>(null);
     const checkboxRefs = items.map(() => createRef<HTMLInputElement>());
     const [formData, setFormData]  = useState<FormData>(null);
 
-    const handleCheckboxChanged = (e:SyntheticEvent) => {
+    const setAllCheckedFromItems = () => {
+        // 개별 아이템 선택
         if (!formRef.current) return;
-        const targetInput = e.target as HTMLInputElement;
         const data = new FormData(formRef.current);
         const selectedCount = data.getAll('select-item').length;
-        if (targetInput.name === 'select-all') {
-            // all-check
-            const allChecked = targetInput.checked;
-            checkboxRefs.forEach(inputElem => {
-                inputElem.current!.checked = allChecked
-            })
+        formRef.current.querySelector<HTMLInputElement>('.select-all').checked = (selectedCount === items.length);
+
+    }
+
+    const setItemsCheckFromAll = (targetInput: HTMLInputElement) => {
+        const allChecked = targetInput.checked;
+        checkboxRefs.forEach(inputElem => {
+            inputElem.current!.checked = allChecked
+        })
+    }
+
+    const handleCheckboxChanged = (e?:SyntheticEvent) => {
+        if (!formRef.current) return;
+        const targetInput = e?.target as HTMLInputElement;
+        if (targetInput && targetInput.classList.contains('select-all')) {
+            setItemsCheckFromAll(targetInput)
         } else {
-            // each item
-            formRef.current.querySelector<HTMLInputElement>('.select-all').checked = (selectedCount === items.length);
+            setAllCheckedFromItems();
         }
+        const data = new FormData(formRef.current);
         setFormData(data);
     };
+
+    useEffect(() => {
+        checkedCartData.forEach(item => {
+            const itemRef  = checkboxRefs.find(ref => ref.current!.dataset.id === item.id)
+            if (itemRef) {
+                itemRef.current!.checked = true;
+            }
+        })
+        setAllCheckedFromItems();
+
+    },[])
 
     useEffect(() => {
         const checkedItems =  checkboxRefs.reduce<CartType[]>((res, ref, i) => {
@@ -36,8 +57,10 @@ function CartList({items}: { items: CartType[] }) {
             }
             return res;
         },[]);
-        setCheckedCartData(checkedItems as CartType[])
+        setCheckedCartData(checkedItems)
     },[items, formData]);
+
+
 
 
     return (

@@ -54,7 +54,7 @@ function CartItem({id, imageUrl, price, title, amount }: CartType, ref: Forwarde
 
     return (
         <li className='cart-item'>
-            <input className='cart-item__checkbox' type="checkbox" name={`select-item`} ref={ref}/>
+            <input className='cart-item__checkbox' type="checkbox" name={`select-item`} ref={ref} data-target-id={id}/>
             <ItemData  imageUrl={imageUrl} price={price} title={title} />
             <input type='number' className='cart-item__amount' value={amount} min={1} onChange={handleUpdateAmount}/>
             <button className='cart-item__button' type='button' onClick={handleDeleteItem}>삭제</button>
